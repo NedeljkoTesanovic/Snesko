@@ -19,6 +19,7 @@ public class Snesko {
     char rijec[]; //cenzurisana rijec (sa -)
     int hp;
     Snesko(){
+        ciljnaRijec = "";
         rjecnik = new ArrayList<String>();
         rjecnik = procitajFajl("dictionary.txt");
         napraviSnjeska();
@@ -111,6 +112,10 @@ public class Snesko {
     }
     
     private void resetujIgru(){
+        if(rjecnik.isEmpty()){
+            System.out.println("Рјечник је празан! Унесите бар једну ријеч у њега да бисте играли.");
+            return;
+        }
         napraviSnjeska();
         izaberiRijec();
     }
@@ -139,7 +144,7 @@ public class Snesko {
         int i = slucajanBroj(rjecnik.size()-1);
         ciljnaRijec = rjecnik.get(i).toUpperCase();
         rijec = new char[ciljnaRijec.length()];
-        
+
         for(i = 0; i< ciljnaRijec.length(); i++){
             rijec[i] = '-';
         }
@@ -219,12 +224,11 @@ public class Snesko {
     
     public void igraj(){
         // Pokrece glavni meni
-        izaberiRijec();
-        int opcija = 1;
+        int opcija = 9;
         while(opcija != 0){
-            System.out.println("\tСЊЕШКО");
-            System.out.println("(Снешко - Ијекавица едишн)\n\n");
-            System.out.println("\tГЛАВНИ МЕНИ\n");
+            System.out.println("\t-= СЊЕШКО =-");
+            System.out.println(" (Снешко - Ијекавица едишн)\n\n");
+            System.out.println("\t ГЛАВНИ МЕНИ\n");
             System.out.println("1. Покрени игру");
             System.out.println("2. Оштампај рјечник");
             System.out.println("3. Додај нову ријеч у рјечник");
@@ -236,7 +240,7 @@ public class Snesko {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             try {
                 opcija = Integer.parseInt(reader.readLine());
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
                 Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -244,7 +248,11 @@ public class Snesko {
             switch(opcija){
                 case 1:
                     resetujIgru();
-                    System.out.println("Игра започета!\n\n\n");
+                    if(ciljnaRijec.equals("")){
+                        System.out.println("Ниједна ријеч није изабрана, није могуће играти! :(");
+                        break;
+                    }
+                    System.out.println("\n\n\tИГРА ЗАПОЧЕТА\n\n");
                     boolean nijeKraj = true;
                     List<String> pokusaji = new ArrayList<String>();
                     List<String> pokusaneRijeci = new ArrayList<String>();
@@ -300,7 +308,13 @@ public class Snesko {
                             }
                         }
                     }
-                    System.out.println("Игра завршена!\n");
+                    System.out.println("\n\n\tИГРА ЗАВРШЕНА\n");
+                    try {
+                        TimeUnit.SECONDS.sleep(3);
+                    } catch (InterruptedException ex) {
+                        System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+                        Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     break;
                 case 2:
                     ostampajRjecnik();
@@ -325,6 +339,7 @@ public class Snesko {
                     break;
                 default:
                     System.out.println("Непостојећа опција!");
+                    opcija = 9;
             }
         }    
     }   
