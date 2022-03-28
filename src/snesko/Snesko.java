@@ -113,7 +113,7 @@ public class Snesko {
     
     private void resetujIgru(){
         if(rjecnik.isEmpty()){
-            System.out.println("Рјечник је празан! Унесите бар једну ријеч у њега да бисте играли.");
+            System.out.println("Речник је празан! Унесите бар једну реч у њега да бисте играли.");
             return;
         }
         napraviSnjeska();
@@ -131,10 +131,10 @@ public class Snesko {
             File fajl = new File(putanja);
             Scanner citac = new Scanner(fajl);
             while(citac.hasNextLine()){
-                retVal.add(citac.nextLine());
+                retVal.add(citac.nextLine().toUpperCase());
             }
         } catch (Exception ex){
-            System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+            System.out.println("Снег се отопио! :(\nПровери лог за грешку");
             Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
         }
         return retVal;
@@ -151,7 +151,7 @@ public class Snesko {
     }
     
     private void ostampajRjecnik(){
-        System.out.println("Рјечник:");
+        System.out.println("Речник:");
         for(int i = 0; i < rjecnik.size(); i++){
             System.out.println(i + ". " + rjecnik.get(i));
         }
@@ -160,36 +160,40 @@ public class Snesko {
     
     private void dodajRijec(){
         String r;
-        System.out.println("Унесите нову ријеч: ");
+        System.out.println("Унесите нову реч: ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            r = reader.readLine();
+            r = reader.readLine().toUpperCase();
+            if(r.isBlank()){
+                System.out.println("Препознат је празан унос! Ништа није додато у речник!");
+                return;
+            }
             if(rjecnik.contains(r)){
-            System.out.println("Ријеч већ постоји у рјечнику!");
+            System.out.println("Реч већ постоји у речнику!");
             } else {
                 try {
                 FileWriter writer = new FileWriter("dictionary.txt", true);
-                writer.write(r+"\n");
+                writer.write(r.toUpperCase()+"\n");
                 writer.close();
-                System.out.println("Ријеч успјешно уписана у ријечник!");
-                rjecnik.add(r);
+                System.out.println("Реч успешно уписана у речник!");
+                rjecnik.add(r.toUpperCase());
               } catch (IOException ex) {
-                System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+                System.out.println("Снег се отопио! :(\nПровери лог за грешку");
                 Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
               }
             }
         } catch (IOException ex) {
-            System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+            System.out.println("Снег се отопио! :(\nПровери лог за грешку");
             Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     private void ukloniRijec(){
         String r;
-        System.out.println("Унесите ријеч: ");
+        System.out.println("Унесите реч: ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            r = reader.readLine();
+            r = reader.readLine().toUpperCase();
             int i = rjecnik.lastIndexOf(r);
             if(i != -1){
                 rjecnik.remove(i);
@@ -199,26 +203,26 @@ public class Snesko {
                         writer.write(var + "\n");
                     }
                     writer.close();
-                    System.out.println("Ријеч успјешно уклоњена из ријечника!");
+                    System.out.println("Реч успешно уклоњена из речника!");
                 } catch (IOException ex) {
-                    System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+                    System.out.println("Снег се отопио! :(\nПровери лог за грешку");
                     Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                System.out.println("Та ријеч не постоји у рјечнику!");
+                System.out.println("Та реч не постоји у речнику!");
             }
         } catch (IOException ex) {
-            System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+            System.out.println("Снег се отопио! :(\nПровери лог за грешку");
             Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
     
     private void ostampajPravila(){
-        System.out.println("Прољеће је наступило, и наш сњешко се топи!\nЈедини начин да га спасите је да погодите ријеч из рјечника коју је рачунар насумично изабрао. Можете унијети једно слово или цијелу ријеч.");
-        System.out.println("Уколико унесете слово и ако је оно садржано у ријечи, откриће се на којим мјестима унутар ријечи се оно налази.\nАко тог слова нема у ријечи, дио сњешка ће се истопити. Поновни унос већ откривених слова се не рачуна као грешка.");
-        System.out.println("Уколико се ради о читавој ријечи, сваки погрешан покушај ће бити пропраћен озбиљним посљедицама по сњешка.");
-        System.out.println("Откривање свих слова, без погађања ријечи, такође доноси побједу.\n\n");
+        System.out.println("Пролеће је наступило, и наш снешко се топи!\nЈедини начин да га спасите је да погодите реч из речника коју је рачунар насумично изабрао. Можете уносити по једно слово или цијелу ријеч по покушају.");
+        System.out.println("Уколико унесете слово и ако је оно садржано у речи, откриће се на којим местима унутар ријечи се оно налази.\nАко тог слова нема у речи, дио снешка ће се истопити. Поновни унос већ откривених слова се не рачуна као грешка.");
+        System.out.println("Уколико се ради о читавој речи, сваки погрешан покушај ће бити пропраћен озбиљним посљедицама по снешка.");
+        System.out.println("Откривање свих слова, без погађања речи, такође доноси победу.\n\n");
     }
 
     
@@ -226,13 +230,12 @@ public class Snesko {
         // Pokrece glavni meni
         int opcija = 9;
         while(opcija != 0){
-            System.out.println("\t-= СЊЕШКО =-");
-            System.out.println(" (Снешко - Ијекавица едишн)\n\n");
+            System.out.println("\t-= СНЕШКО =-");
             System.out.println("\t ГЛАВНИ МЕНИ\n");
             System.out.println("1. Покрени игру");
-            System.out.println("2. Оштампај рјечник");
-            System.out.println("3. Додај нову ријеч у рјечник");
-            System.out.println("4. Уклони ријеч из рјечника");
+            System.out.println("2. Оштампај речник");
+            System.out.println("3. Додај нову реч у речник");
+            System.out.println("4. Уклони реч из речника");
             System.out.println("5. Оштампај правила игре");
             System.out.println("0. Угаси програм\n");
             System.out.println("Унесите цифру жељене опције, те притисните ЕNTER:\n");
@@ -241,15 +244,16 @@ public class Snesko {
             try {
                 opcija = Integer.parseInt(reader.readLine());
             } catch (Exception ex) {
-                System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+                System.out.println("Снег се отопио! :(\nПровери лог за грешку");
                 Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
+                opcija = 9;
             }
             
             switch(opcija){
                 case 1:
                     resetujIgru();
                     if(ciljnaRijec.equals("")){
-                        System.out.println("Ниједна ријеч није изабрана, није могуће играти! :(");
+                        System.out.println("Ниједна реч није изабрана, није могуће играти! :(");
                         break;
                     }
                     System.out.println("\n\n\tИГРА ЗАПОЧЕТА\n\n");
@@ -258,7 +262,7 @@ public class Snesko {
                     List<String> pokusaneRijeci = new ArrayList<String>();
                     while(nijeKraj){
                         System.out.println(dijeloviSnjeska);
-                        System.out.println("\n\nРијеч:");
+                        System.out.println("\n\nРеч:");
                         System.out.println("Претходни покушаји: ");
                         System.out.println(pokusaji);
                         System.out.println(pokusaneRijeci);
@@ -269,26 +273,42 @@ public class Snesko {
                             unos = reader.readLine();
                             unos = unos.toUpperCase();
                         } catch (IOException ex) {
-                            System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+                            System.out.println("Снег се отопио! :(\nПровери лог за грешку");
                             Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         
                         if(unos.equals(ciljnaRijec)){
-                            System.out.println("Браво! Погодили сте ријеч! Зимске чаролије су сачуване!");
+                            System.out.println(ciljnaRijec);
+                            System.out.println("Браво! Погодили сте реч! Зимске чаролије су сачуване!");
                             if(hp<6){
                                 System.out.println("(бар оно што је остало од њих...)");
                             }
                             nijeKraj = false;
                             break;
                         } else {
-                            if(unos.length() == 1 && pokusaji.contains(unos)){
+                            if(unos.equals("")){
+                                System.out.println("Празан унос! Унесите слово или целу реч, па притисните ENTER:");
+                            }else if(unos.length() == 1 && pokusaji.contains(unos)){
                                 System.out.println("То слово сте већ уносили!");
                             } else if(unos.length() == 1 && ciljnaRijec.contains(unos)){
                                 System.out.println("Погодак!");
+                                int j = 0;
                                 for(int i = 0; i < ciljnaRijec.length(); i++){
                                     if(unos.charAt(0) == ciljnaRijec.charAt(i)){
                                         rijec[i] = ciljnaRijec.charAt(i);
                                     }
+                                    if(rijec[i] == '-'){
+                                        j++;
+                                    }
+                                }
+                                if(j == 0){
+                                    System.out.println(ciljnaRijec);
+                                    System.out.println("Браво! Погодили сте реч! Зимске чаролије су сачуване!");
+                                    if(hp<6){
+                                        System.out.println("(бар оно што је остало од њих...)");
+                                    }
+                                    nijeKraj = false;
+                                    break;
                                 }
                             }
                             else {
@@ -297,8 +317,8 @@ public class Snesko {
                                 istopiSnjeska(--hp);
                                 if(hp == 0){
                                     nijeKraj = false;
-                                    System.out.println("Сњешко се скроз истопио! :(");
-                                    System.out.println("Тражена ријеч је била: " + ciljnaRijec);
+                                    System.out.println("Снешко се скроз истопио! :(");
+                                    System.out.println("Тражена реч је била: " + ciljnaRijec);
                                 }
                             }
                             if(unos.length() == 1){
@@ -312,7 +332,7 @@ public class Snesko {
                     try {
                         TimeUnit.SECONDS.sleep(3);
                     } catch (InterruptedException ex) {
-                        System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+                        System.out.println("Снег се отопио! :(\nПровери лог за грешку");
                         Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
@@ -333,7 +353,7 @@ public class Snesko {
                     try {
                         TimeUnit.SECONDS.sleep(3);
                     } catch (InterruptedException ex) {
-                        System.out.println("Снијег се отопио! :(\nПровјери лог за грешку");
+                        System.out.println("Снег се отопио! :(\nПровјери лог за грешку");
                         Logger.getLogger(Snesko.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
